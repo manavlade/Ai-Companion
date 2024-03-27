@@ -9,10 +9,6 @@ generator client {
   previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
-// datasource db {
-//   provider = "mongodb"
-//   url      = "mongodb+srv://mv:mvc@mvcluster.dfltfc5.mongodb.net/sample_airbnb?retryWrites=true&w=majority"
-// }
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
