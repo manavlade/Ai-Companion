@@ -17,7 +17,7 @@ const fonts = Poppins({
  export default function Navbar() {
     
    return (
-     <div className='flex w-full z-50 flex justify-between item-center py-2 px-4 
+     <div className='flexw-full z-50 flex justify-between item-center py-2 px-4 
      border-b border-primary/10 bg-secondary  h-16'>
         <div className='flex items-center'>
 

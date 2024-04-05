@@ -41,7 +41,6 @@ export const ChatMessages = ({
                 content= {`Hello I am ${companion.name}, ${companion.description} `}
                 />  
                
-
                 {messages.map((message) => {
                   return( 
                     // yaha change kiya hai return extra dala hai
@@ -49,7 +48,7 @@ export const ChatMessages = ({
                           key={message.content}
                           role={message.role}
                           content={message.content}
-                          src={message.src}
+                          src={companion.src}
                       />
                   )
                 })}
