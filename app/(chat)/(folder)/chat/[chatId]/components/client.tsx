@@ -1,7 +1,13 @@
 "use client"
+
+import { useCompletion } from "ai/react";
 import { ChatHeader } from '@/components/Chat-Header';
 import { Companion, Message } from '@prisma/client';
-import React from 'react'
+import React, { FormEvent, useState } from 'react'
+import { useRouter } from "next/navigation";
+import { ChatForm } from "@/components/chat-form";
+import { ChatMessages } from "@/components/chat-messages";
+import { ChatMessageProps } from "@/components/chat-message";
 
 interface ChatClientProps {
     companion: Companion & {
@@ -13,15 +19,57 @@ interface ChatClientProps {
 };
 export const ChatClient = ({
     companion
-}: ChatClientProps) =>  {
-  return (
-    <>
-    <div className=' fle flex-col h-full p-4 space-y-2' >
-        <ChatHeader companion={companion} />
+}: ChatClientProps) => {
 
-    </div>
-    </>
-  )
+    const router = useRouter();
+    const [messages, setMessages] = useState<ChatMessageProps[]>(companion.messages)
+
+    const {
+        input,
+        isLoading,
+        handleInputChange,
+        handleSubmit,
+        setInput
+    } = useCompletion({
+        api: `/api/chat/${companion.id}`,
+        onFinish(prompt, completion) {
+            const systemMessage: ChatMessageProps = {
+                role: "system",
+                content: completion,
+            };
+            setMessages((current) => [...current, systemMessage]);
+            setInput("");
+            router.refresh();
+        },
+    });
+
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+        const userMessage: ChatMessageProps = {
+            role: "user",
+            content: input,
+        };
+
+        setMessages((current) => [...current, userMessage]);
+        handleSubmit(e);
+    }
+    return (
+        <>
+            <div className=' fle flex-col h-full p-4 space-y-2' >
+                <ChatHeader companion={companion} />
+                <ChatMessages 
+                    companion={companion}
+                    isLoading={isLoading}
+                    messages={messages}
+                />
+                <ChatForm
+                    isLoading={isLoading}
+                    input={input}
+                    handleInputChange={handleInputChange}
+                    onSubmit={onSubmit}
+                />
+            </div>
+        </>
+    )
 }
 
 export default ChatClient;

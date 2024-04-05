@@ -1,11 +1,13 @@
 import prismadb from "@/lib/prismadb";
 import { CompanionForm } from "./components/companion-form";
 import { ObjectId } from 'mongodb';
+import { auth, redirectToSignIn } from "@clerk/nextjs";
 interface CompanionIdPageProps {
     params: {
         companionId: string;
     };
 };
+
 
 const CompanionPage = async ({
     params
@@ -24,9 +26,14 @@ const CompanionPage = async ({
     }
 
     if (companionId) {
+        // if(!userId){
+        //     return redirectToSignIn();
+        // }
         const companion = await prismadb.companion.findUnique({
             where: {
-                id: companionId
+                id: companionId,
+                // userId
+                //To ensure no other user can delete your account 
             }
         });
         // Proceed with your logic using the companion data

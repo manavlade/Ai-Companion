@@ -35,9 +35,10 @@ const fonts = Poppins({
                 Upgrade 
                 <Sparkle className='h-4 w-4 fill-white text-white' />
             </Button>
-            <ModeToggle/>
-            <UserButton/>
-        </div>
+            <ModeToggle/>  
+            <UserButton afterSignOutUrl="/" /> 
+            {/* // yaha changes kiya hai */}
+         </div>
      </div>
    )
  }

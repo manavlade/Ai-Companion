@@ -1,5 +1,5 @@
 import prismadb from "@/lib/prismadb";
-import { currentUser } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
@@ -28,6 +28,7 @@ export async function PATCH(
         const companion = await prismadb.companion.update({
             where: { 
                 id: params.companionId,
+                userId: user.id
             },
             data: {
                 categoryId,
@@ -49,3 +50,28 @@ export async function PATCH(
 }
 // Data fetching ka thoda issue ho raha hai usko dekhna padega companion form route.ts for 
 // push refer karo
+
+export async function DELETE(
+     req: Request,
+    { params } : { params: {companionId: string} }
+) {
+    try {
+        const {userId} = auth();
+
+        if(!userId) {
+            return new NextResponse("Unauthorized User", { status: 401 });
+        }
+
+        const companion = await prismadb.companion.delete({
+            where: {
+                userId,
+                id: params.companionId
+            }
+        });
+
+        return NextResponse.json(companion)
+    } catch (error) {
+        console.log("[COMPANION_DELETE]", error);
+        return new NextResponse("Internal Error", {status: 500});
+    }
+}
