@@ -5,6 +5,7 @@ import { useToast } from "./ui/use-toast";
 import { cn } from "@/lib/utils";
 import { BotAvatar } from "./Bot-Avatar";
 import {BeatLoader} from "react-spinners"
+import { RingLoader } from "react-spinners"
 import { UserAvatar } from "./uer-avatar";
 import { Button } from "./ui/button";
 import { Copy } from "lucide-react";
@@ -46,8 +47,8 @@ export const ChatMessage = ({
                 <div className=" rounded-md px-4 py-2 max-w-sm text-sm bg-primary/10" >
                     {
                         isLoading
-                        ? <BeatLoader 
-                        size={5}
+                            ? <RingLoader 
+                        size={25}
                         color= {theme === "light" ? "black" : "white" } />
                         : content
                     }
